@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en" data-framework="angularjs">
+	<head>
+		<meta charset="utf-8">
+		<title>AngularJS Microblog</title>
+		<link rel="stylesheet" href="index.css">
+		<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700,900" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+		<style>[ng-cloak] { display: none; }</style>
+	</head>
+	<body ng-app="postmvc">
+		<ng-view></ng-view>
+		<script type="text/ng-template" id="index.html">
+			<div id="postApp">
+				<header id="header">
+					<h1>microblog</h1> 
+					<form id="post-form" ng-submit="addPost()" autocomplete="off">
+						<input limit-to="120" id="new-post" placeholder="What's happening?" ng-model="newPost" autofocus>
+						<label class="character-count">{{ 120 - newPost.length }}</label>
+					</form>
+				</header>
+				<section id="main" ng-show="posts.length" ng-cloak>
+					<ul class="post-list">
+						<li ng-repeat="post in posts | unique: 'id' | orderBy: createdAt.amFromUnix | reverse: true " ng-class="{liked: post.liked, reposted: post.reposted, commented: post.commented, reply: post.reply_to, replied: post.replied}" ng-if="!post.reply_to" id="{{ post.id }}">
+						  <div class="view">
+						    <div class="post-wrapper" ng-class="{self: post.user == '4'}">
+						      <div class="post-info">
+						        <div class="post-username">
+						          <label class="reposted-label" ng-if="post.reposted">
+						            <i class="material-icons">repeat</i> You reposted</label>
+						          <label class="posted-by-label" ng-repeat="user in users" ng-if="user.user == post.user">
+						            <i class="material-icons" ng-if="user.verified">verified_user</i> {{ user.real_name }} - @{{ user.username }}
+						          </label>
+						        </div>
+						        <div class="post-timestamp">
+						          <label>
+						            <span am-time-ago="post.originalTs | amFromUnix | amParse:'YYYY.MM.DD HH:mm:ss'" ng-show="post.reposted"></span>
+						            <span am-time-ago="post.createdAt | amFromUnix | amParse:'YYYY.MM.DD HH:mm:ss'" ng-hide="post.reposted"></span>
+						          </label>
+						        </div>
+						      </div>
+						      <div class="post">
+						        <div class="user-picture">
+						          <div class="img user-{{ post.user }}" ng-if="post.user!= '4'"></div>
+						        </div>
+						        <div class="post-container">
+						          <div class="post-content">
+						            <div class="actions" ng-if="!post.reposted">
+						              <div class="action-row">
+						                <div ng-hide="post.reposted">
+						                  <i class="material-icons" ng-click="showCommentForm = true;" ng-model="newCommentTitle">reply</i>
+						                  <small>{{ replyCount }}</small>
+						                </div>
+						                <div>
+						                  <i class="material-icons" class="repost" ng-click="repostPost(post); repostCount = repostCount + 1" ng-model="post.reposted" ng-hide="post.reposted;">repeat</i>
+						                  <small>{{ repostCount }}</small>
+						                </div>
+						                <div>
+						                  <input class="toggle" ng-click="toggleLiked(post);" ng-change="post.liked" type="checkbox" ng-model="post.liked">
+						                  <small>{{ post.liked ? "1" : ""}}</small>
+						                </div>
+						                <div ng-if="post.user == 4">
+						                	<i class="material-icons" ng-click="removePost(post)">clear</i>
+						                </div>
+						              </div>
+						              <form ng-submit="postComment(post); clearCommentForm(post); replyCount = replyCount + 1" id="comment-form" ng-show="showCommentForm" ng-mouseleave="showCommentForm=false">
+						                <div class="comment-row">
+						                  <div class="post-comment">
+						                    <input ng-model="newCommentTitle" placeholder="Comment" limit-to="120" autofocus>
+						                    <label class="character-count">{{ 120 - newCommentTitle.length }}</label>
+						                  </div>
+						                </div>
+						              </form>
+						            </div>
+						            <label ng-bind-template="{{ post.title }}" ng-bind-html="post.title" class="message-title">
+						              {{ post.title }}
+						            </label>
+						            <i class="destroy" ng-click="removePost(post)" ng-show="post.reposted"></i>
+						          </div>
+						        </div>
+						        <div class="user-picture">
+						          <div class="img" ng-if="post.user == '4'"></div>
+						        </div>
+						      </div>
+						      <div class="attachment">
+						        <img ng-src="{{post.imageURL}}">
+						      </div>
+
+						    <!-- BEGIN COMMENT -->
+						    <div ng-repeat="nc in getComment(post) | unique: 'id'" ng-class="replied">
+						        <div class="post-wrapper reply" ng-class="{self: nc.commentUser == '4'}">
+						          <div class="post-info">
+						            <div class="post-username" ng-if="nc.commentUser != 4">
+						              <label class="posted-by-label" ng-repeat="user in users" ng-if="user.user == nc.user">
+						                <i class="material-icons" ng-if="user.verified">verified_user</i> {{ user.real_name }} - @{{ nc.username }} {{ nc.commentUser }}
+						              </label>
+						            </div>
+
+						            <div class="post-timestamp">
+						              <label>
+						                <span am-time-ago="nc.createdAt | amFromUnix | amParse:'YYYY.MM.DD HH:mm:ss'"></span>
+						              </label>
+						            </div>
+						          </div>
+						        <div class="post">
+						            <div class="user-picture">
+						              <div class="img {{ nc.user == 1 ? 'user-1' : nc.user == 2 ? 'user-2' : 'user-3' }}" ng-if="nc.commentUser!= '4'" ng-class="">
+						              </div>
+						            </div>
+						            <div class="post-container">
+						              <div class="post-content">
+						              <div class="actions" ng-if="!post.reposted">
+						              <div class="action-row">
+						                <div>
+						                  <input class="toggle" ng-click="toggleLiked(nc);" ng-change="nc.liked" type="checkbox" ng-model="nc.liked">
+						                  <small>{{ nc.liked ? "1" : ""}}</small>
+						                </div>
+						                <div ng-if="nc.commentUser == 4">
+						                	<i class="material-icons" ng-click="removePost(post)">clear</i>
+						                </div>
+						              </div>
+						             </div>
+						                <label ng-bind-template=" {{ nc.title }} " class="message-title">
+						                  {{ nc.title }}
+						                </label>
+						              </div>
+						            </div>
+						            <div class="user-picture">
+						              <div class="img" ng-if="nc.commentUser == '4'"></div>
+						            </div>
+						          </div>
+						        </div>
+						      </div>
+						      <!-- END COMMENT-->
+
+						    </div>
+						  </div>
+						</li>
+					</ul>
+				</section>
+			</div>
+		</script>
+
+	<script src="angular.js"></script>
+	<script src="angular-sanitize.js"></script>
+	<script src="angular-filter.min.js"></script>
+	<script src="angular-route.js"></script>
+	<script src="angular-resource.js"></script>
+
+	<script src="moment.min.js"></script>
+	<script src="angular-moment.js"></script>
+	<script src="app.js"></script>
+	<!-- Controller -->
+	<script src="postCtrl.js"></script>
+
+	<!-- Services -->
+	<script src="postStorage.js"></script>
+
+	<!-- Directives -->
+	<script src="postLimit.js"></script>
+	<script src="postFocus.js"></script>
+	<script src="postEscape.js"></script>
+	</body>
+</html>

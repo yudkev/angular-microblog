@@ -1,0 +1,588 @@
+* {
+	box-sizing: border-box;
+	-webkit-font-smoothing: antialiased;
+	-moz-font-smoothing: antialiased;
+	font-smoothing: antialiased;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+
+button {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	font-size: 100%;
+	vertical-align: baseline;
+	font-family: inherit;
+	font-weight: inherit;
+	color: inherit;
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+	line-height: 1.4em;
+	background: #f5f5f5;
+	margin: 0 auto;
+	font-weight: 300;
+}
+
+button,
+input[type="checkbox"] {
+	outline: none;
+}
+
+input[type="checkbox"] {
+/*	pointer-events: none;*/
+}
+
+.hidden {
+	display: none;
+}
+
+#postApp {
+	background: #fff;
+	margin: 130px auto 40px auto;
+	width: 50%;
+	position: relative;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+	            0 25px 50px 0 rgba(0, 0, 0, 0.1);
+}
+
+#postApp h1 {
+	position: absolute;
+	top: -100px;
+	width: 100%;
+	font-size: 50px;
+	font-weight: 100;
+	text-align: center;
+	color: #00c397;
+	-webkit-text-rendering: optimizeLegibility;
+	-moz-text-rendering: optimizeLegibility;
+	text-rendering: optimizeLegibility;
+}
+
+#new-post {
+	position: relative;
+	margin: 0;
+	width: 100%;
+	min-height: 60px;
+	font-size: 15px;
+	border: none;
+	outline: none;
+	background: #fff;
+	padding: 16px 16px 16px 60px;
+	box-sizing: border-box;
+}
+
+
+#new-post::-webkit-input-placeholder {
+	color: #b1bebe;
+}
+
+.character-count {
+	color: #00c397;
+	font-size: 13px;
+	position: absolute;
+	left: 0;
+  	top: calc(1.7em - 1px);
+  	padding-left: 20px;
+}
+
+#main {
+	position: relative;
+	z-index: 2;
+	border-top: 1px solid #e6e6e6;
+}
+
+.post-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.post-list li {
+	font-size: 15px;
+	line-height: 1.4;
+	color: #092828;
+	position: relative;
+	margin: 1rem;
+	padding: 0 1rem 0 0;
+	display: block;
+}
+
+.post-list li:last-child {
+	padding-bottom: 50px;
+}
+
+.post-wrapper {
+	margin: 0 0;
+}
+
+.post-wrapper:first-child {
+	margin-top: 0;
+}
+
+.post {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.post-info {
+	display: flex;
+	flex: 0 1 auto;
+	line-height: 1.4;
+	padding-bottom: 10px;
+	justify-content: flex-end;
+	align-items: flex-end;
+	flex-direction: row;
+}
+
+.post-username {
+	flex: 1 0 auto;
+	margin-left: 11%;
+	font-size: 11px;
+	align-self: flex-end;
+	text-align: left;
+	font-weight: 400;
+	margin-top: 15px;
+}
+
+.post-timestamp {
+	padding-right: 5px;
+	flex: 1 0 auto;
+	color: #092828;
+	font-size: 11px;
+	text-align: right;
+	margin-top: 15px;
+	margin-right: 10.66666667%;
+}
+
+.self .post-timestamp {
+	margin-right: 14%;
+}
+
+.user-picture {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 10.66666667%;
+	height: 48px;
+	min-width: 48px;
+	align-self: flex-start;	
+}
+
+.img {
+	line-height: 0;
+	border-radius: 100%;
+	background: #f2f2f2;
+	height: 48px;
+	width: 48px;
+}
+
+.user-1 {
+	background: url('user_1.jpg');
+	background-size: cover;
+
+}
+
+.user-2 {
+	background: url('user_2.jpg');
+	background-size: cover;
+}
+
+.user-3 {
+	background: url('user_3.jpg');
+	background-size: cover;
+}
+
+.self .user-picture > .img {
+	background: #092828 url('better-icon.svg') center center;
+	background-size: 50%;
+	background-repeat: no-repeat;
+}
+
+.post-container {
+	flex: 1 1 0%;
+	position: relative;
+	padding: 18px 15px 18px 0;
+	margin-left: 3%;
+	border-radius: 4px;
+	background-color: #f6f6f6;
+}
+
+.self .post-container {
+	margin-right: 3%;
+	margin-left: 3%;
+	background-color: #00c397;
+	color: #ffffff;
+}
+
+.self .post-container:after,
+.self .post-container:before {
+	right: 0;
+	top: 5;
+	margin-right: -25px;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.self .post-container:after {
+	border-color: transparent;
+	border-left-color: #00c397;
+	border-width: 15px;
+	margin-top: -20px;
+	transform: skewX(50deg) scaleX(2);
+}
+
+.self .post-container:before {
+	border-color: transparent;
+	border-left-color: transparent;
+	border-left: 5px solid transparent;
+	border-width: 2px;
+	margin-top: -5px;
+}
+
+.post-container:after,
+.post-container:before {
+	  right: 100%;
+	  top: 20px;
+	  border: solid transparent;
+	  content: " ";
+	  height: 0;
+	  width: 0;
+	  position: absolute;
+	  pointer-events: none;
+}
+
+.post-container:after {
+	border-color: transparent;
+	border-right-color: #f6f6f6;
+	border-width: 15px;
+	margin-top: -25px;
+	transform: skewY(30deg) scaleX(2);
+}
+
+.post-container:before {
+	border-color: transparent;
+	border-right-color: #fff;
+	border-left: 10px solid transparent;
+	border-width: 2px;
+	margin-top: -5px;
+}
+
+.post-content {
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 1.4;
+	min-height: 46px;
+}
+
+ .self .post-content {
+	color: #ffffff;
+}
+
+.attachment-icon {
+	margin: 0;
+	padding: 0;
+	vertical-align: middle;
+}
+
+.post-info {
+	font-size: 11px;
+}
+
+.post-info i {
+	font-size: 14px;
+}
+
+/**
+* https://i.imgur.com/SKGfQAa.png makes an excellent test attachment 
+*/
+.attachment {
+	text-align: center;
+	margin: -5px 13.5%;
+}
+
+.attachment img {
+	height: auto;
+	width: 99.5%;
+
+}
+
+.post-list li .toggle {
+	text-align: center;
+	border: none; /* Mobile Safari */
+	-webkit-appearance: none;
+	appearance: none;
+	margin-top: -2px;
+	padding: 0;
+	vertical-align: top;
+	cursor: pointer;
+	height: 40px;
+}
+
+/* Reply, repost, and like actions */
+
+.actions {
+	text-align: center;
+	width: 100%;
+	margin: 0;
+	padding: 8px 0 0 0;
+	position: absolute;
+	color: #092828;
+	transition: color .2s ease-out;
+	cursor: pointer;
+	display: none;
+}
+
+.action-row {
+	display: flex; 	
+	text-align: center;
+	justify-content: center;
+	width: 50%;
+	margin: 0 auto;
+	padding: 0;
+}
+
+.action-row > div {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	flex: 1;
+	align-self: flex-start;
+}
+
+.action-row > div small {
+	font-size: 11px;
+	display: block;
+	margin-top: -5px;
+	align-self: flex-baseline;
+}
+
+.actions i:hover {
+	color: #00c397;
+}
+
+.self .actions i:hover {
+	color: #fff;
+}
+
+.post-list li .toggle:after {
+	content: '♥︎';
+	font-size: 24px;
+}
+
+.actions .toggle:hover:after {
+	color: #00c397;
+}
+
+.self .actions .toggle:hover:after {
+	color: #ffffff;
+}
+
+.self .actions .toggle:checked:after {
+	content: '♥︎';
+	color: #ffffff;
+}
+
+.self .actions small {
+	color: #fff;
+}
+
+#comment-form {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	background: #ccc;
+	padding: 0;
+	z-index: 5;
+	margin-top: 50px;
+}
+
+.push {
+	margin-top: 50px;
+}
+
+.comment-row {
+	display: flex;
+	justify-content: flex-start;
+	width: 100%;
+	margin: 0;
+}
+
+.post-comment {
+	flex: 5;
+	border: 1px solid #f2f2f2;
+}
+
+.post-comment .character-count  {
+	margin-left: 0;
+}
+
+.comment-action {
+	flex: 1;
+	align-self: baseline;
+}
+
+.comment-action button {
+	font-size: 12px;
+	margin: 0 10px;
+	background: #fff;
+	padding: 18px 25px;
+}
+
+.post-comment input {
+	margin: 0;
+	width: 100%;
+	position: relative;
+	font-size: 15px;
+	border: none;
+	outline: none;
+	background: #fff;
+	padding: 16px 16px 16px 60px;
+}
+
+.post-list li label {
+	margin-left: 1rem;
+	display: block;
+	transition: color 0.4s;
+	line-height: 1.4;
+}
+
+.reposted-label {
+	color: #657786;
+	font-weight: 300;
+}
+
+.posted-by-label {
+	margin-top: 10px;
+}
+
+.self .reposted-label {
+	margin-left: 5%;
+}
+
+.post-list li.commented label {
+	margin-left: 200px;
+	font-weight: 100;
+}
+
+.reply {
+	font-weight: 100;
+	margin: 0 2% 0 12%;
+}
+
+.self .reply {
+	margin-left: 2%;
+	margin-right: 12%;
+}
+
+.post-list li .destroy {
+	display: none;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	width: 40px;
+	height: 40px;
+	margin: auto 0;
+	font-size: 30px;
+	color: #fff;
+	margin-bottom: 11px;
+	transition: color 0.2s ease-out;
+	cursor: pointer;
+}
+
+.post-list li .destroy:hover {
+	color: #f2f2f2;
+}
+
+.post-list li .destroy:after {
+	content: '×';
+}
+
+.post-list li:hover .destroy {
+	display: block;
+}
+
+
+/* Mobile interaction */
+.post-container:focus .actions,
+.post-container:hover .actions
+ {
+	display: block;
+}
+
+li:not(.reposted) .post-container:focus .message-title,
+li:not(.reposted) .post-container:hover .message-title {
+	display: none;
+}
+
+/*
+	Hack to remove background from Mobile Safari.
+	Can't use it globally since it destroys checkboxes in Firefox
+*/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	#toggle-all,
+	.post-list li .toggle {
+		background: none;
+	}
+
+	.post-list li .toggle {
+		height: 30px;
+	}
+}
+
+@media (max-width: 680px) {
+	.post-username, .post-timestamp {
+		margin-left: 0%;
+		flex: 0 1 auto;
+	}
+
+	.self .post-username {
+		margin-left: 0;
+	}
+
+	.post-container {
+		margin-left: 0;
+		padding-right: 0;
+	}
+
+	.self .post-container {
+		margin-right: 3%;
+		margin-left: 3%;
+		padding-right: 0;
+	}
+
+	.self .reply {
+		margin-left: 0;
+	}
+
+	#postApp {
+		min-width: 95%;
+	}
+}
+
+@media (max-width: 900px) {
+	.post-container {
+		margin-left: 8%;
+	}
+
+	#postApp {
+		width: 70% !important;
+	}
+
+	.post-username {
+		margin-left: 20%;
+	}
+}
